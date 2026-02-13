@@ -14,6 +14,7 @@ data class GeneralInfoPageBlockChildrenNotion(
 )
 
 data class ResultBlockItem(
+    val storyTitle: String?,
     @field:JsonProperty("heading_1")
     val heading1: HeadingBlock? = null,
     @field:JsonProperty("heading_2")

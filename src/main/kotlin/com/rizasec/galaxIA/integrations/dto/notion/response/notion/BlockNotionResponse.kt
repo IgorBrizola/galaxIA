@@ -2,6 +2,9 @@ package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.rizasec.galaxIA.dto.GeneralInfoPageBlockNotion
+import com.rizasec.galaxIA.dto.notion.AboutPage
+import java.time.OffsetDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BlockNotionResponse(

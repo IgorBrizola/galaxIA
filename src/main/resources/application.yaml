@@ -19,3 +19,9 @@ clients:
     url: "https://api.notion.com/"
     key: ${NOTION_KEY}
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true

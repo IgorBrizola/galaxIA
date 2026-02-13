@@ -11,7 +11,6 @@ import com.rizasec.galaxIA.dto.notion.NumberedListItemBlock
 import com.rizasec.galaxIA.dto.notion.ParagraphBlock
 import com.rizasec.galaxIA.dto.notion.ToDoBlock
 import com.rizasec.galaxIA.dto.notion.ToggleBlock
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,11 +27,12 @@ data class BlockChildrenNotionResponse(
     @field:JsonProperty("request_id")
     val requestId: String? = null,
 ) {
-    fun convertToPageBlockAndChildren() =
+    fun convertToPageBlockAndChildren(storyTitle: String?) =
         GeneralInfoPageBlockChildrenNotion(
             results =
                 this.results.map {
                     ResultBlockItem(
+                        storyTitle = storyTitle,
                         heading1 = it.heading1,
                         heading2 = it.heading2,
                         heading3 = it.heading3,
