@@ -1,4 +1,4 @@
-package com.rizasec.galaxIA.integrations.dto.notion.response
+package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

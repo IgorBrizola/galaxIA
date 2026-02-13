@@ -1,7 +1,13 @@
-package com.rizasec.galaxIA.integrations.dto.notion.response
+package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.rizasec.galaxIA.dto.notion.BulletedListItemBlock
+import com.rizasec.galaxIA.dto.notion.HeadingBlock
+import com.rizasec.galaxIA.dto.notion.NumberedListItemBlock
+import com.rizasec.galaxIA.dto.notion.ParagraphBlock
+import com.rizasec.galaxIA.dto.notion.ToDoBlock
+import com.rizasec.galaxIA.dto.notion.ToggleBlock
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BlockChildrenNotionResponse(
@@ -38,7 +44,6 @@ data class BlockItem(
     @field:JsonProperty("in_trash")
     val inTrash: Boolean,
     val type: String,
-    // Block type specific fields (nullable because only one will be present based on type)
     @field:JsonProperty("heading_1")
     val heading1: HeadingBlock? = null,
     @field:JsonProperty("heading_2")
@@ -54,49 +59,4 @@ data class BlockItem(
     val toDo: ToDoBlock? = null,
     val toggle: ToggleBlock? = null,
     val divider: Map<String, Any>? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class HeadingBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    @field:JsonProperty("is_toggleable")
-    val isToggleable: Boolean,
-    val color: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class ParagraphBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    val color: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class NumberedListItemBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    val color: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class BulletedListItemBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    val color: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class ToDoBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    val checked: Boolean,
-    val color: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class ToggleBlock(
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-    val color: String,
 )
