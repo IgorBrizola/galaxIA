@@ -1,3 +1,21 @@
+server:
+  port: 8082
+  servlet:
+    context-path: '/galaxIA'
+
 spring:
   application:
     name: galaxIA
+
+  cloud:
+    openfeign:
+      client:
+        config:
+          NotionClient:
+            url: ${clients.notion.url}
+
+clients:
+  notion:
+    url: "https://api.notion.com/"
+    key: ${NOTION_KEY}
+
