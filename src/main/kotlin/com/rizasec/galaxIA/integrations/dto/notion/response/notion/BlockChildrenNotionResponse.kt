@@ -2,12 +2,17 @@ package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.rizasec.galaxIA.dto.GeneralInfoPageBlockChildrenNotion
+import com.rizasec.galaxIA.dto.ResultBlockItem
+import com.rizasec.galaxIA.dto.notion.AboutPage
 import com.rizasec.galaxIA.dto.notion.BulletedListItemBlock
 import com.rizasec.galaxIA.dto.notion.HeadingBlock
 import com.rizasec.galaxIA.dto.notion.NumberedListItemBlock
 import com.rizasec.galaxIA.dto.notion.ParagraphBlock
 import com.rizasec.galaxIA.dto.notion.ToDoBlock
 import com.rizasec.galaxIA.dto.notion.ToggleBlock
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BlockChildrenNotionResponse(
@@ -22,7 +27,36 @@ data class BlockChildrenNotionResponse(
     val block: Map<String, Any>? = null,
     @field:JsonProperty("request_id")
     val requestId: String? = null,
-)
+) {
+    fun convertToPageBlockAndChildren() =
+        GeneralInfoPageBlockChildrenNotion(
+            results =
+                this.results.map {
+                    ResultBlockItem(
+                        heading1 = it.heading1,
+                        heading2 = it.heading2,
+                        heading3 = it.heading3,
+                        paragraph = it.paragraph,
+                        numberedListItem = it.numberedListItem,
+                        bulletedListItem = it.bulletedListItem,
+                        toDo = it.toDo,
+                        toggle = it.toggle,
+                        aboutPage =
+                            AboutPage(
+                                hasChildren = null,
+                                archived = it.archived,
+                                inTrash = it.inTrash,
+                                isLocked = null,
+                                createdTime = OffsetDateTime.parse(it.createdTime).toLocalDateTime(),
+                                createdBy = it.createdBy.id,
+                                lastEditedTime = OffsetDateTime.parse(it.lastEditedTime).toLocalDateTime(),
+                                lastEditedBy = it.lastEditedBy.id,
+                                url = null,
+                            ),
+                    )
+                },
+        )
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BlockItem(

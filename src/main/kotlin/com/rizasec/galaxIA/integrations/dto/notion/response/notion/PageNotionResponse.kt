@@ -1,8 +1,14 @@
-package com.rizasec.galaxIA.integrations.dto.notion.response
+package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.rizasec.galaxIA.dto.GeneralPageInfoNotion
+import com.rizasec.galaxIA.dto.notion.AboutPage
+import com.rizasec.galaxIA.dto.notion.NotionDate
+import com.rizasec.galaxIA.dto.notion.RelationRef
+import com.rizasec.galaxIA.dto.notion.RichText
+import java.time.OffsetDateTime
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -30,7 +36,45 @@ data class PageNotionResponse(
     val publicUrl: String? = null,
     @field:JsonProperty("request_id")
     val requestId: String? = null,
-)
+) {
+    fun convertToGeneralInfoPage() =
+        GeneralPageInfoNotion(
+            id = this.id,
+            databaseId = this.parent.databaseId,
+            name =
+                this.properties.name
+                    ?.title
+                    ?.joinToString("\n") { it.plainText.toString() },
+            statusRoadMap =
+                this.properties.roadmapStatus
+                    ?.status
+                    ?.name,
+            type =
+                this.properties.type
+                    ?.select
+                    ?.name,
+            backLogTeam =
+                this.properties.backlogTime
+                    ?.multiSelect
+                    ?.joinToString("\n") { it.name },
+            priority = this.properties.priority?.number,
+            launchProduction = this.properties.productionRelease?.date,
+            realises = this.properties.releases?.relation,
+            storys = this.properties.storys?.relation,
+            aboutPage =
+                AboutPage(
+                    hasChildren = null,
+                    archived = this.archived,
+                    inTrash = this.inTrash,
+                    isLocked = this.isLocked,
+                    createdTime = OffsetDateTime.parse(this.createdTime).toLocalDateTime(),
+                    createdBy = this.createdBy.id,
+                    lastEditedTime = OffsetDateTime.parse(this.lastEditedTime).toLocalDateTime(),
+                    lastEditedBy = this.lastEditedBy.id,
+                    url = this.url,
+                ),
+        )
+}
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Properties(
@@ -104,15 +148,10 @@ data class RelationProperty(
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class RelationRef(
-    val id: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class NumberProperty(
     val id: String,
     val type: String,
-    val number: Number? = null,
+    val number: Int? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -154,40 +193,10 @@ data class SelectValue(
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class CheckboxProperty(
-    val id: String,
-    val type: String,
-    val checkbox: Boolean,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class DateProperty(
     val id: String,
     val type: String,
     val date: NotionDate? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class NotionDate(
-    val start: String? = null,
-    val end: String? = null,
-    @field:JsonProperty("time_zone")
-    val timezone: String? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class LastEditedTimeProperty(
-    val id: String,
-    val type: String,
-    @field:JsonProperty("last_edited_time")
-    val lastEditedTime: String,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class FormulaProperty(
-    val id: String,
-    val type: String,
-    val formula: FormulaValue,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -196,21 +205,6 @@ data class FormulaValue(
     val number: Number? = null,
     val date: NotionDate? = null,
     val boolean: Boolean? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class PeopleProperty(
-    val id: String,
-    val type: String,
-    val people: List<User> = emptyList(),
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class LastEditedByProperty(
-    val id: String,
-    val type: String,
-    @field:JsonProperty("last_edited_by")
-    val lastEditedBy: User,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -235,24 +229,6 @@ data class TitleProperty(
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class RichTextProperty(
-    val id: String,
-    val type: String,
-    @field:JsonProperty("rich_text")
-    val richText: List<RichText> = emptyList(),
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class RichText(
-    val type: String,
-    val text: RichTextText? = null,
-    val annotations: RichTextAnnotations? = null,
-    @field:JsonProperty("plain_text")
-    val plainText: String? = null,
-    val href: String? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class RichTextText(
     val content: String? = null,
     val link: RichTextLink? = null,
@@ -261,16 +237,6 @@ data class RichTextText(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class RichTextLink(
     val url: String? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class RichTextAnnotations(
-    val bold: Boolean? = null,
-    val italic: Boolean? = null,
-    val strikethrough: Boolean? = null,
-    val underline: Boolean? = null,
-    val code: Boolean? = null,
-    val color: String? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -303,12 +269,6 @@ data class Parent(
     val type: String,
     @field:JsonProperty("database_id")
     val databaseId: String? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class Icon(
-    val type: String,
-    val external: External? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

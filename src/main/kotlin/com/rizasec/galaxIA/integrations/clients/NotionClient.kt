@@ -1,10 +1,10 @@
 package com.rizasec.galaxIA.integrations.clients
 
 import com.rizasec.galaxIA.configuration.integrations.FeignClientConfig
-import com.rizasec.galaxIA.integrations.dto.notion.response.BlockChildrenNotionResponse
-import com.rizasec.galaxIA.integrations.dto.notion.response.BlockNotionResponse
-import com.rizasec.galaxIA.integrations.dto.notion.response.PageNotionResponse
-import com.rizasec.galaxIA.integrations.dto.notion.response.UserMeNotionResponse
+import com.rizasec.galaxIA.integrations.dto.notion.response.notion.BlockChildrenNotionResponse
+import com.rizasec.galaxIA.integrations.dto.notion.response.notion.BlockNotionResponse
+import com.rizasec.galaxIA.integrations.dto.notion.response.notion.PageNotionResponse
+import com.rizasec.galaxIA.integrations.dto.notion.response.notion.UserMeNotionResponse
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

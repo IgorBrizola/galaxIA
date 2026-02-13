@@ -34,4 +34,10 @@ class NotionController(
     fun getBlocksAndChildrenById(
         @PathVariable id: String,
     ) = notionService.getBlocksAndChildrenById(id)
+
+    @GetMapping("epic/{id}/general/info")
+    @ResponseStatus(HttpStatus.OK)
+    fun getGeneralInfoEpicById(
+        @PathVariable id: String,
+    ) = notionService.getGeneralInfoEpicById(id)
 }

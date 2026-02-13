@@ -8,10 +8,10 @@ data class AboutPage(
     val hasChildren: Boolean? = null,
     val archived: Boolean,
     val inTrash: Boolean,
-    val isLocked: Boolean,
+    val isLocked: Boolean? = null,
     val createdTime: LocalDateTime,
     val createdBy: String,
-    val lastEditTime: LocalDateTime,
-    val lastEditBy: String,
+    val lastEditedTime: LocalDateTime,
+    val lastEditedBy: String,
     val url: String? = null,
 )

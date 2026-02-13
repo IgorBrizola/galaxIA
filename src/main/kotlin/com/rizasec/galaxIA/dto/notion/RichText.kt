@@ -2,7 +2,6 @@ package com.rizasec.galaxIA.dto.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.rizasec.galaxIA.integrations.dto.notion.response.notion.RichTextAnnotations
 import com.rizasec.galaxIA.integrations.dto.notion.response.notion.RichTextText
 
 @JsonIgnoreProperties(ignoreUnknown = true)
