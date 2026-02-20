@@ -1,6 +1,7 @@
 package com.rizasec.galaxIA.integrations.dto.notion.response.notion
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.rizasec.galaxIA.dto.GeneralInfoPageBlockChildrenNotion
 import com.rizasec.galaxIA.dto.ResultBlockItem
@@ -9,15 +10,19 @@ import com.rizasec.galaxIA.dto.notion.BulletedListItemBlock
 import com.rizasec.galaxIA.dto.notion.HeadingBlock
 import com.rizasec.galaxIA.dto.notion.NumberedListItemBlock
 import com.rizasec.galaxIA.dto.notion.ParagraphBlock
+import com.rizasec.galaxIA.dto.notion.RichText
+import com.rizasec.galaxIA.dto.notion.SyncedBlock
 import com.rizasec.galaxIA.dto.notion.ToDoBlock
 import com.rizasec.galaxIA.dto.notion.ToggleBlock
 import java.time.OffsetDateTime
+import java.util.Collections.emptyList
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class BlockChildrenNotionResponse(
     @field:JsonProperty(value = "object")
     val objectName: String,
-    val results: List<BlockItem> = emptyList(),
+    val results: MutableList<BlockItem> = emptyList(),
     @field:JsonProperty("next_cursor")
     val nextCursor: String? = null,
     @field:JsonProperty("has_more")
@@ -27,12 +32,16 @@ data class BlockChildrenNotionResponse(
     @field:JsonProperty("request_id")
     val requestId: String? = null,
 ) {
-    fun convertToPageBlockAndChildren(storyTitle: String?) =
+    fun convertToPageBlockAndChildren(title: String?) =
         GeneralInfoPageBlockChildrenNotion(
+            title = title,
             results =
                 this.results.map {
                     ResultBlockItem(
-                        storyTitle = storyTitle,
+                        objectName = it.objectName,
+                        id = it.id,
+                        parentType = it.parent.type,
+                        parentId = it.parent.getParentId(),
                         heading1 = it.heading1,
                         heading2 = it.heading2,
                         heading3 = it.heading3,
@@ -41,9 +50,12 @@ data class BlockChildrenNotionResponse(
                         bulletedListItem = it.bulletedListItem,
                         toDo = it.toDo,
                         toggle = it.toggle,
+                        syncedBlock = it.syncedBlock,
+                        syncedBlockChildren = mutableListOf<ResultBlockItem>(),
+                        codeBlock = it.code,
                         aboutPage =
                             AboutPage(
-                                hasChildren = null,
+                                hasChildren = it.hasChildren,
                                 archived = it.archived,
                                 inTrash = it.inTrash,
                                 isLocked = null,
@@ -78,6 +90,8 @@ data class BlockItem(
     @field:JsonProperty("in_trash")
     val inTrash: Boolean,
     val type: String,
+    @field:JsonProperty("synced_block")
+    val syncedBlock: SyncedBlock? = null,
     @field:JsonProperty("heading_1")
     val heading1: HeadingBlock? = null,
     @field:JsonProperty("heading_2")
@@ -92,5 +106,13 @@ data class BlockItem(
     @field:JsonProperty("to_do")
     val toDo: ToDoBlock? = null,
     val toggle: ToggleBlock? = null,
+    val code: CodeBlock?,
     val divider: Map<String, Any>? = null,
+)
+
+data class CodeBlock(
+    @field:JsonProperty("rich_text")
+    val richText: List<RichText>,
+    val language: String,
+    val caption: List<RichText>? = null,
 )

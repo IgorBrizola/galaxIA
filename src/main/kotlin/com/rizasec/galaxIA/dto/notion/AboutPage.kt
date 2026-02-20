@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class AboutPage(
-    val hasChildren: Boolean? = null,
+    val hasChildren: Boolean,
     val archived: Boolean,
     val inTrash: Boolean,
     val isLocked: Boolean? = null,

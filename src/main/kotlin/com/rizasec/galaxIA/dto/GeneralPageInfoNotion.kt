@@ -5,10 +5,10 @@ import com.rizasec.galaxIA.dto.notion.AboutPage
 import com.rizasec.galaxIA.dto.notion.NotionDate
 import com.rizasec.galaxIA.dto.notion.RelationRef
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 data class GeneralPageInfoNotion(
     val id: String,
-    val databaseId: String?,
+    val parentId: String?,
+    val parentType: String?,
     val name: String?,
     val statusRoadMap: String?,
     val type: String?,

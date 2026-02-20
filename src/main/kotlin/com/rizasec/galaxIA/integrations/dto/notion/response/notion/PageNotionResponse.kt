@@ -40,7 +40,8 @@ data class PageNotionResponse(
     fun convertToGeneralInfoPage() =
         GeneralPageInfoNotion(
             id = this.id,
-            databaseId = this.parent.databaseId,
+            parentId = this.parent.getParentId(),
+            parentType = this.parent.type,
             name =
                 this.properties.name
                     ?.title
@@ -63,7 +64,7 @@ data class PageNotionResponse(
             storys = this.properties.storys?.relation,
             aboutPage =
                 AboutPage(
-                    hasChildren = null,
+                    hasChildren = false,
                     archived = this.archived,
                     inTrash = this.inTrash,
                     isLocked = this.isLocked,
@@ -267,11 +268,13 @@ data class Person(
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Parent(
     val type: String,
+    @field:JsonProperty("page_id")
+    val pageId: String? = null,
+    @field:JsonProperty("block_id")
+    val blockId: String? = null,
     @field:JsonProperty("database_id")
     val databaseId: String? = null,
-)
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class External(
-    val url: String,
-)
+    val workspace: Boolean? = null,
+) {
+    fun getParentId(): String? = pageId ?: blockId ?: databaseId
+}

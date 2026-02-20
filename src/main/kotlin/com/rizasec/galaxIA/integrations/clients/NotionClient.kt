@@ -8,6 +8,7 @@ import com.rizasec.galaxIA.integrations.dto.notion.response.notion.UserMeNotionR
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
     name = "NotionClient",
@@ -30,5 +31,7 @@ interface NotionClient {
     @GetMapping("/v1/blocks/{id}/children")
     fun getBlocksAndChildrenById(
         @PathVariable id: String,
+        @RequestParam("start_cursor", required = false) startCursor: String? = null,
+        @RequestParam("page_size", required = false) pageSize: Int = 100,
     ): BlockChildrenNotionResponse
 }
